@@ -32,3 +32,20 @@ Download the Fossify Phone App now and step into a mobile world where privacy se
 <img alt="App image" src="fastlane/metadata/android/en-US/images/phoneScreenshots/2_en-US.png" width="30%">
 <img alt="App image" src="fastlane/metadata/android/en-US/images/phoneScreenshots/3_en-US.png" width="30%">
 </div>
+
+
+
+
+17 aug 2024 
+auto receive - done
+auto mute - done
+auto disconnect - done
+notify famlink 
+
+record audio on tile 
+place robo call play recording 
+auto disconnect
+
+
+disbale walkie 
+

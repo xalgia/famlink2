@@ -66,6 +66,7 @@ class CallActivity : SimpleActivity() {
     private var audioRouteChooserDialog: DynamicBottomSheetChooserDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        println("CallActivity.onCreate")
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
@@ -728,6 +729,7 @@ class CallActivity : SimpleActivity() {
     }
 
     private fun callRinging() {
+        println("CallActivity.callRinging")
         binding.incomingCallHolder.beVisible()
     }
 
