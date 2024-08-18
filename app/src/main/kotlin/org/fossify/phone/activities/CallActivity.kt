@@ -3,16 +3,20 @@ package org.fossify.phone.activities
 import android.annotation.SuppressLint
 import android.app.KeyguardManager
 import android.content.Context
+import android.media.MediaPlayer
 import android.content.Intent
 import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.RippleDrawable
 import android.media.AudioManager
+import android.media.ToneGenerator
+import android.media.ToneGenerator.TONE_PROP_BEEP
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager
 import android.telecom.Call
 import android.telecom.CallAudioState
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
@@ -40,6 +44,8 @@ import kotlin.math.max
 import kotlin.math.min
 
 class CallActivity : SimpleActivity() {
+    private lateinit var mediaPlayer: MediaPlayer
+
     companion object {
         fun getStartIntent(context: Context): Intent {
             val openAppIntent = Intent(context, CallActivity::class.java)
@@ -81,7 +87,30 @@ class CallActivity : SimpleActivity() {
         addLockScreenFlags()
         CallManager.addListener(callCallback)
         updateCallContactInfo(CallManager.getPrimaryCall())
+        updateCallContactInfo(CallManager.getPrimaryCall())
+
+// Check if the call is incoming
+val primaryCall = CallManager.getPrimaryCall()
+if ((primaryCall?.state == Call.STATE_RINGING)) {
+    toggleMicrophone()
+}
+        changeCallAudioRoute()
+
+
+//
+//        // Initialize MediaPlayer and play beep.mp3
+//        mediaPlayer = MediaPlayer.create(this, R.raw.beep)
+//        mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL)
+//        mediaPlayer.start()
+
+
+        callDurationHandler.postDelayed(30000) {
+            if (!isCallEnded) {
+                endCall()
+            }
+        }
     }
+
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
@@ -105,6 +134,12 @@ class CallActivity : SimpleActivity() {
 
         if (screenOnWakeLock?.isHeld == true) {
             screenOnWakeLock!!.release()
+        }
+
+
+        // Release MediaPlayer resources
+        if (::mediaPlayer.isInitialized) {
+            mediaPlayer.release()
         }
     }
 
@@ -430,7 +465,10 @@ class CallActivity : SimpleActivity() {
     private fun changeCallAudioRoute() {
         val supportAudioRoutes = CallManager.getSupportedAudioRoutes()
         if (supportAudioRoutes.contains(AudioRoute.BLUETOOTH)) {
-            createOrUpdateAudioRouteChooser(supportAudioRoutes)
+            // select bluetooth by default if available
+            val bluetoothRoute = CallAudioState.ROUTE_BLUETOOTH
+            CallManager.setAudioRoute(bluetoothRoute)
+//            createOrUpdateAudioRouteChooser(supportAudioRoutes)
         } else {
             val isSpeakerOn = !isSpeakerOn
             val newRoute = if (isSpeakerOn) CallAudioState.ROUTE_SPEAKER else CallAudioState.ROUTE_WIRED_OR_EARPIECE
@@ -729,7 +767,9 @@ class CallActivity : SimpleActivity() {
     }
 
     private fun callRinging() {
-        println("CallActivity.callRinging")
+        // LOG EVENT TO CONSOLE
+        Log.d("CallActivity", "callRinging fhgfdh6tryhtgh")
+
         binding.incomingCallHolder.beVisible()
     }
 

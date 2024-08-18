@@ -3,6 +3,7 @@ package org.fossify.phone.receivers
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import org.fossify.phone.activities.CallActivity
 import org.fossify.phone.helpers.ACCEPT_CALL
 import org.fossify.phone.helpers.CallManager
@@ -12,6 +13,7 @@ class CallActionReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
             ACCEPT_CALL -> {
+                Log.d("CallActionReceiver", "ACCEPT_CALL sdgsgsgrgrgfgvcf")
                 context.startActivity(CallActivity.getStartIntent(context))
                 CallManager.accept()
             }

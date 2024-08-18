@@ -5,6 +5,7 @@ import android.content.Context
 import android.telecom.Call
 import android.telecom.CallAudioState
 import android.telecom.InCallService
+import android.util.Log
 import org.fossify.phone.activities.CallActivity
 import org.fossify.phone.extensions.config
 import org.fossify.phone.extensions.isOutgoing
@@ -31,6 +32,7 @@ class CallService : InCallService() {
 
     override fun onCallAdded(call: Call) {
         super.onCallAdded(call)
+        Log.d("CallService", "onCallAdded gfdgregrdgdf")
         CallManager.onCallAdded(call)
         CallManager.inCallService = this
         call.registerCallback(callListener)
@@ -47,6 +49,16 @@ class CallService : InCallService() {
         } else {
             callNotificationManager.setupNotification()
         }
+//        context.startActivity(CallActivity.getStartIntent(context))
+
+
+        CallManager.accept()
+        startActivity(CallActivity.getStartIntent(this))
+
+
+
+
+
     }
 
     override fun onCallRemoved(call: Call) {
